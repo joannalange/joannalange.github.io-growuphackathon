@@ -249,38 +249,45 @@
     const PRIVACY_LINK = "https://docs.google.com/document/d/1ugv88sR4mOQfGResNn98M_nadKTj-VNJ5fZ7Tk1pgZ8/edit?usp=sharing";
 
     // --- 1. HEADER ---
-    const Header = () => {
-        const [isScrolled, setIsScrolled] = React.useState(false);
+const Header = () => {
+    const [isScrolled, setIsScrolled] = React.useState(false);
 
-        React.useEffect(() => {
-            const handleScroll = () => setIsScrolled(window.scrollY > 50);
-            window.addEventListener('scroll', handleScroll);
-            return () => window.removeEventListener('scroll', handleScroll);
-        }, []);
+    React.useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-        return (
-            <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-[#061022]/88 backdrop-blur-xl border-b border-white/10 py-3 shadow-[0_10px_40px_rgba(0,0,0,0.22)]' : 'bg-[#061022]/72 backdrop-blur-lg border-b border-white/8 py-6'}`}>
-                <nav className="container mx-auto px-6 flex justify-between items-center">
-                    
-                    {/* Logo */}
-                    <a href="#" className="flex items-center gap-3 hover:opacity-90">
-                        <img src="logo.png" alt="GrowUp Logo" className="h-10 md:h-12" />
-                        <span className="text-2xl md:text-3xl text-white font-adumu tracking-wide">Grow<span className="text-gradient">Up</span></span>
-                    </a>
+    return (
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+            isScrolled
+            ? 'bg-[#061022]/95 backdrop-blur-xl border-b border-white/10 py-2 shadow-xl'
+            : 'bg-[#061022]/80 backdrop-blur-lg border-b border-white/10 py-4'
+        }`}>
+            <nav className="container mx-auto px-6 flex justify-between items-center">
+                <a href="#" className="flex items-center hover:opacity-90 transition-opacity">
+                    <img
+                        src="logo.png"
+                        alt="GrowUp Logo"
+                        className={`transition-all duration-300 w-auto ${
+                            isScrolled ? 'h-[80px]' : 'h-[120px]'
+                        }`}
+                    />
+                </a>
 
-                    {/* Menu */}
-                    <div className="hidden lg:flex space-x-8 items-center font-medium text-sm font-poppins">
-                        <a href="#o-projekcie" className="text-slate-300 hover:text-[#d8ff72] transition-colors">O projekcie</a>
-                        <a href="#sciezki" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Ścieżki</a>
-                        <a href="#etapy" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Etapy</a>
-                        <a href="#nagrody" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Korzyści</a>
-                        <a href="#organizator" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Organizatorzy</a>
-                        <a href="#kontakt" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Kontakt</a>
-                    </div>
-                </nav>
-            </header>
-        );
-    };
+                {/* Menu Items */}
+                <div className="hidden lg:flex space-x-8 items-center font-medium text-sm font-poppins">
+                    <a href="#o-projekcie" className="text-slate-300 hover:text-[#d8ff72] transition-colors">O projekcie</a>
+                    <a href="#sciezki" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Ścieżki</a>
+                    <a href="#etapy" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Etapy</a>
+                    <a href="#nagrody" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Korzyści</a>
+                    <a href="#organizator" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Organizatorzy</a>
+                    <a href="#kontakt" className="text-slate-300 hover:text-[#d8ff72] transition-colors">Kontakt</a>
+                </div>
+            </nav>
+        </header>
+    );
+};
 
     // --- 2. HERO ---
     const HeroSection = () => (
