@@ -48,12 +48,17 @@ bot protection. Flagging the correction rather than letting it stand uncorrected
 
 ## Infrastructure as code
 
-All Cloudflare-side resources (zone, baseline TLS settings, Worker custom domain binding) are
-managed via Terraform in `terraform/` — not ad-hoc dashboard clicks or one-off API calls. This
-makes every change reviewable in a PR diff before it touches anything, and reversible via
-`terraform destroy` / state history rather than "hope someone remembers what they clicked."
-Provider: `cloudflare/cloudflare` ~> 5.15 (resolved 5.24.0). See `terraform/README.md` for setup
-and the bootstrap-order gotcha (Custom Domain creation needs the Worker to already exist).
+All Cloudflare-side resources (zone, baseline TLS settings, mail records, Worker custom domain
+binding) are managed via Terraform in a **separate sibling repo**, `growup-iac` (at
+`~/projects/deepkind-org/growup-iac`, `growuphackathon/` subdirectory) — not ad-hoc dashboard
+clicks, not one-off API calls, and deliberately not inside this repo. It started here (`terraform/`
+in this repo) but got moved out after that location's state file was destroyed by a routine
+worktree cleanup (this repo's normal workflow deletes a worktree after its PR merges; the
+Terraform state was gitignored and living inside that worktree, so it went with it — recovered
+via `terraform import`, and moved out permanently rather than risk it again). Account IDs and
+infra state references don't belong alongside public site source anyway. See that repo's
+`growuphackathon/README.md` for setup and the bootstrap-order gotcha (Custom Domain creation
+needs the Worker to already exist).
 
 **Architecture: Workers with static assets, not Cloudflare Pages.** Started with Pages
 (`cloudflare_pages_project` + `cloudflare_pages_domain`); Pages project creation via API kept
@@ -92,7 +97,12 @@ build (that stays `wrangler deploy` in CI, against the Worker Terraform binds th
       - DKIM: `google._domainkey` has a valid Google Workspace DKIM key
       - `www` CNAMEs to `joannalange.github.io` — confirmed correct (GitHub Pages'
         standard custom-domain pattern; `www` redirects cleanly to the apex, verified 200)
-      - All of the above must be recreated in Cloudflare DNS before or immediately at cutover.
+      - SRV: `_autodiscover._tcp` → `10 10 443 autodiscover.s179.cyberfolks.pl` (mail-client
+        autodiscovery, hosted by cyberfolks.pl itself, separate from Google Workspace)
+      - No CAA record exists (nothing to conflict with Cloudflare's auto-issued cert)
+      - **All of the above already recreated in Cloudflare DNS** — see growup-iac's `mail.tf`.
+        Applied 2026-09-07, TTL 300s on every record (deliberately low — see Rollback Procedure
+        below). Inert until nameservers actually delegate; zero effect on live mail today.
 - [x] 2. Add growuphackathon.pl to Cloudflare via Terraform (`cloudflare_zone` + 4 TLS
       `cloudflare_zone_setting` resources) — applied 2026-09-06. Zone status `pending` until
       nameservers are delegated at cutover.
@@ -123,11 +133,12 @@ build (that stays `wrangler deploy` in CI, against the Worker Terraform binds th
       static assets spot-checked correct.
 - [ ] 7. **Checkpoint — get explicit go-ahead before this step.** Lower DNS TTL on the current
       A records at cyberfolks.pl 24-48h in advance, then delegate nameservers to Cloudflare
-      (the assigned nameservers are in the `name_servers` Terraform output). Recreate the MX/
-      SPF/DKIM/DMARC records from Task 1 in Cloudflare DNS as part of this step, before or
-      immediately as the nameservers switch — not after. The moment propagation is confirmed,
-      immediately do Task 4's AI Crawl Control allowlist — it can only be configured once the
-      zone goes active, so it happens right here, not before.
+      (the assigned nameservers are in the `name_servers` Terraform output). The mail records
+      are already staged in Cloudflare DNS (Task 1) — nothing to recreate in the moment, just
+      confirm they're still correct before flipping nameservers. The moment propagation is
+      confirmed, immediately do Task 4's AI Crawl Control allowlist — it can only be configured
+      once the zone goes active, so it happens right here, not before. **See Rollback Procedure
+      below — read it before starting this step, not during.**
 - [ ] 8. Monitor propagation (`dig`, multiple resolvers) and confirm: site resolves, HTTPS cert
       issues correctly, GSC still shows the property verified, sitemap still fetches clean,
       and a test email round-trip still works (send + receive via `kontakt@`).
@@ -139,6 +150,42 @@ build (that stays `wrangler deploy` in CI, against the Worker Terraform binds th
       serving the last-deployed build). Remove only after that window with no issues.
 - [ ] 11. Update [[project_seo_campaign_status]] and [[project_cloudflare_migration_status]]
       memory once stable.
+
+## Rollback Procedure (added 2026-09-06 — read before Task 7, not during)
+
+Mail continuity is the highest-stakes part of this cutover — growuphackathon.pl is at a crucial
+stage of the program, and a mail outage right now would be tragic, not just inconvenient. This
+section exists so a rollback decision is never made under pressure with undocumented steps.
+
+**Honest caveat first**: DNS *record* TTLs (MX, TXT, etc.) are fully within our control and can
+be made near-instant (see below). The nameserver *delegation* itself is cached according to the
+`.pl` registry's own TTL for that delegation — neither we nor Cloudflare control that directly.
+In practice this is fast (minutes), but it is not something either direction of this cutover can
+promise as truly instant. Said plainly rather than overpromised.
+
+**What's already done to make rollback fast:**
+- Every DNS record created in Cloudflare (mail records, Task 1) has an explicit 300s TTL — not
+  Cloudflare's default. If a correction or rollback is needed, it propagates in minutes, not
+  whatever a long TTL would have cached.
+- The exact rollback action is a single, pre-documented step: revert nameservers at cyberfolks.pl
+  back to exactly `ns1.cyberfolks.pl`, `ns2.cyberfolks.pl`, `ns3.cyberfolks.pl`. No lookup needed
+  under pressure.
+
+**Abort criteria — decided now, not in the moment:**
+- The site or the MX record doesn't resolve correctly within 15 minutes of expected propagation, OR
+- A test email sent immediately after cutover doesn't arrive within 30 minutes.
+
+If either triggers: revert nameservers immediately. Don't wait-and-see past these thresholds.
+
+**One reassuring, not excusing, fact about mail specifically**: SMTP has built-in retry. A sending
+mail server that hits a temporary MX problem typically queues and retries for 24-72 hours rather
+than bouncing immediately. A brief misconfiguration risks *delay*, not necessarily silent loss —
+this doesn't make it acceptable to get wrong, but it means a short window isn't a hair-trigger
+cliff either.
+
+**Post-cutover verification** (Task 8) should run immediately, not be manually eyeballed — check
+every record (site, MX, SPF, DKIM, DMARC, autodiscover SRV) resolves to the expected value within
+the first few minutes, before considering the cutover settled.
 
 ## Review Criteria
 
