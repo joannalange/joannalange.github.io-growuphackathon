@@ -12,11 +12,28 @@ export const prerender = true;
 
 const content = await getHomeContent();
 const title = 'Regulamin programu GrowUp Hackathon 2026';
-const description = 'Regulamin i zasady uczestnictwa w programie GrowUp Hackathon 2026.';
+const description =
+  'Regulamin GrowUp Hackathon 2026: warunki uczestnictwa, przebieg wydarzenia, zasady oceny projektów, nagrody, własność intelektualna i wizerunek uczestników.';
 const pdfUrl = content.links.regulaminPdf;
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Strona główna', item: 'https://growuphackathon.pl/' },
+    { '@type': 'ListItem', position: 2, name: 'Regulamin', item: 'https://growuphackathon.pl/regulamin/' },
+  ],
+};
+const breadcrumbJsonLdSafe = JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c');
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  socialLinks={{ facebook: content.links.facebook, instagram: content.links.instagram }}
+  cloudflareToken={content.analytics.cloudflareToken}
+>
+  <script is:inline type="application/ld+json" set:html={breadcrumbJsonLdSafe} />
   <Header nav={content.nav} />
   <main id="main" tabindex="-1" class="regulamin">
     <div class="container container--md regulamin__inner">

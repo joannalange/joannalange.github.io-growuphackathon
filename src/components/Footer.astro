@@ -40,7 +40,7 @@ const { footer, links } = Astro.props;
       </div>
 
       <nav class="footer__nav" aria-label="Nawigacja w stopce">
-        <h2 class="footer__col-title">{footer.navTitle}</h2>
+        <h3 class="footer__col-title">{footer.navTitle}</h3>
         <ul>
           {
             footer.navLinks.map((link) => (
@@ -53,7 +53,7 @@ const { footer, links } = Astro.props;
       </nav>
 
       <div class="footer__contact">
-        <h2 class="footer__col-title">{footer.contactTitle}</h2>
+        <h3 class="footer__col-title">{footer.contactTitle}</h3>
         <a class="footer__email" href={safeHref(`mailto:${links.contactEmail}`)}>
           <Icon name="ph:envelope-bold" aria-hidden="true" />
           {links.contactEmail}
@@ -67,9 +67,10 @@ const { footer, links } = Astro.props;
 
     <div class="footer__bottom">
       <p class="footer__copyright">{footer.copyright}</p>
+      <p class="footer__legal-id">Fundacja DeepKind · KRS 0001193215 · NIP 5214132486</p>
       <div class="footer__legal-links">
         <a href={safeHref(links.regulamin)}>Regulamin</a>
-        <a href={safeHref(links.privacy)} target="_blank" rel="noopener noreferrer">Polityka Prywatności (RODO)</a>
+        <a href={safeHref(links.privacy)}>Polityka Prywatności (RODO)</a>
       </div>
       <p class="footer__tagline">{footer.tagline}</p>
     </div>
@@ -148,7 +149,7 @@ const { footer, links } = Astro.props;
   .footer__nav a {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
+    min-height: 48px;
     color: var(--c-gray-300);
     transition: color 0.2s var(--ease-out);
   }
@@ -165,6 +166,7 @@ const { footer, links } = Astro.props;
   .footer__email {
     display: inline-flex;
     align-items: center;
+    min-height: 48px;
     gap: var(--space-2);
     color: var(--c-gray-300);
     transition: color 0.2s var(--ease-out);
@@ -175,6 +177,7 @@ const { footer, links } = Astro.props;
   .footer__partner {
     display: inline-flex;
     align-items: center;
+    min-height: 48px;
     gap: var(--space-2);
     font-weight: 600;
     color: var(--c-lavender);
@@ -199,6 +202,10 @@ const { footer, links } = Astro.props;
     font-size: 0.75rem;
     color: var(--c-gray-400);
   }
+  .footer__legal-id {
+    font-size: 0.75rem;
+    color: var(--c-gray-400);
+  }
   .footer__legal-links {
     display: flex;
     flex-wrap: wrap;
@@ -209,7 +216,7 @@ const { footer, links } = Astro.props;
   .footer__legal-links a {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
+    min-height: 48px;
     color: var(--c-slate-300);
     text-decoration: underline;
     text-underline-offset: 3px;

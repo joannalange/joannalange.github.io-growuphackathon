@@ -1,12 +1,13 @@
 {
   "teamCount": "15",
   "analytics": {
-    "gaMeasurementId": "G-K1FYYRKKYN"
+    "gaMeasurementId": "G-K1FYYRKKYN",
+    "cloudflareToken": "921d5b21370f48ba87bf8eafccf3f254"
   },
   "seo": {
-    "title": "GrowUp Hackathon",
-    "description": "Ogólnopolski hackathon dla młodych ludzi — projektuj technologiczne rozwiązania realnych problemów swojego pokolenia.",
-    "ogImage": "https://growuphackathon.pl/logos/logo_growup.png"
+    "title": "GrowUp Hackathon 2026 — bezpłatnie dla młodych dorosłych",
+    "description": "Bezpłatny, ogólnopolski hackathon dla młodych dorosłych — buduj w zespole rozwiązanie realnego problemu swojego pokolenia. Finał w Krakowie, styczeń 2027.",
+    "ogImage": "https://growuphackathon.pl/logos/og-image.png"
   },
   "nav": [
     {
@@ -49,10 +50,10 @@
   "links": {
     "waitlist": "https://forms.gle/NTtcg68N7odoFQqS8",
     "facebook": "https://www.facebook.com/profile.php?id=61590562146621",
-    "instagram": "https://www.instagram.com/growup_hackaton/",
-    "regulamin": "/regulamin",
+    "instagram": "https://www.instagram.com/growup_hackathon/",
+    "regulamin": "/regulamin/",
     "regulaminPdf": "https://drive.google.com/file/d/1Ir7tV0p8OgEoP0MWNCO-2t2aOeaIFGG1/view?usp=drive_link",
-    "privacy": "/privacy-policy.pdf",
+    "privacy": "/polityka-prywatnosci/",
     "contactEmail": "kontakt@growuphackathon.pl"
   },
   "hero": {
@@ -93,11 +94,11 @@
     "titleLead": "Praktyczne",
     "titleAccent": "laboratorium dorosłości",
     "paragraphs": [
-      "Nikt nie uczy nas, jak być dorosłym — szkoła nie tłumaczy, jak ogarnąć własny budżet, dbać o zdrowie psychiczne, kiedy wszystko dookoła stresuje, ani jak radzić sobie z presją internetu. Dlatego powstał GrowUp — praktyczne laboratorium dorosłości, w którym młodzi ludzie projektują technologiczne rozwiązania realnych problemów swojego pokolenia.",
-      "To nie jest zwykły hackathon: zamiast jednego intensywnego weekendu uczestnicy mają cały miesiąc pracy w pełni online, żeby rozwinąć swój pomysł od idei aż po działający prototyp. W tym czasie zespoły z całej Polski (łącznie {{teamCount}} drużyn) pracują nad swoimi projektami, ucząc się jak prowadzić je krok po kroku pod okiem mentorów, ekspertów i konsultantów z branży.",
-      "Wpadacie ze swoimi pomysłami albo dołączacie do innych, tworzycie zespoły i wspólnie budujecie aplikacje, strony lub narzędzia — może to być aplikacja wspierająca zdrowie psychiczne, narzędzie do nauki finansów osobistych albo system, który krok po kroku tłumaczy pierwsze podatki."
+      "Nikt nie uczy nas, jak być dorosłym - szkoła nie tłumaczy, jak ogarnąć własny budżet, dbać o zdrowie psychiczne, kiedy wszystko dookoła stresuje, ani jak radzić sobie z presją cyfrowego świata. Dlatego powstał GrowUp Hackathon - praktyczne laboratorium dorosłości, w którym młode osoby projektują innowacyjne rozwiązania realnych problemów swojego pokolenia.",
+      "To nie jest zwykły, dwudniowy hackathon: uczestnicy mają sześć tygodni pracy w formie zdalnej (online), aby pod okiem osób mentorskich i eksperckich rozwinąć swój pomysł - od diagnozy problemu, przez badania i testy, aż po działający prototyp. W tym czasie zespoły z całej Polski pracują nad swoimi projektami, ucząc się budowania produktów i usług krok po kroku.",
+      "Możesz dołączyć z własnym pomysłem lub bez niego, solo albo z gotową drużyną. Wspólnie zbudujecie aplikację, usługę, kampanię społeczną lub narzędzie edukacyjne - na przykład platformę wspierającą dobrostan psychiczny, narzędzie do nauki finansów osobistych albo system tłumaczący pierwsze kroki w podatkach i karierze."
     ],
-    "highlight": "Na końcu 5 najlepszych zespołów prezentuje swoje projekty podczas finału w Krakowie, gdzie mają szansę pokazać swoje rozwiązania, zdobyć feedback i rozwinąć je dalej."
+    "highlight": "Na końcu zespoły zaprezentują swoje inicjatywy podczas Wielkiego Finału na żywo w Krakowie, gdzie staną przed jury, odbiorą cenny feedback i zyskają szansę na ich dalsze wdrażanie."
   },
   "paths": {
     "titleLead": "Ścieżki",
@@ -134,14 +135,14 @@
   "stages": {
     "titleLead": "Etapy",
     "titleAccent": "Programu",
-    "intro": "Dokładnie wiesz, co Cię czeka — krok po kroku",
+    "intro": "Dokładnie wiesz, co Cię czeka - krok po kroku",
     "items": [
       {
         "step": "01",
         "icon": "ph-pencil-simple-line",
         "title": "Zapisujesz się",
         "date": "do 20 października",
-        "what": "Rejestracja online — solo lub z gotowym zespołem (max 5 osób). Jeśli nie masz drużyny, połączymy Cię z innymi osobami, które również szukają zespołu.",
+        "what": "Rejestracja online - solo lub z gotowym zespołem (max 5 osób). Jeśli nie masz drużyny, połączymy Cię z innymi osobami, które również szukają zespołu.",
         "expect": [
           "Formularz zgłoszeniowy online",
           "Możliwość dołączenia bez zespołu"
@@ -194,7 +195,7 @@
       },
       {
         "bold": "Wsparcie mentorów",
-        "rest": "— technologicznych, społecznych i biznesowych"
+        "rest": "- technologicznych, społecznych i biznesowych"
       },
       {
         "bold": "Doświadczenie projektowe",
@@ -210,7 +211,7 @@
       },
       {
         "bold": "Networking z mentorami",
-        "rest": "— zbuduj sieć kontaktów z ekspertami z czołowych firm, która pomoże Ci w karierze"
+        "rest": "- zbuduj sieć kontaktów z ekspertami z czołowych firm, która pomoże Ci w karierze"
       },
       {
         "bold": "Dołączenie do społeczności",
@@ -237,7 +238,7 @@
       {
         "icon": "ph-briefcase",
         "title": "Networking z liderami branży",
-        "description": "Zbuduj sieć kontaktów z mentorami z czołowych firm — to często cenniejsze niż sama nagroda. Staże, „job shadowing” i połączenia, które otwierają drzwi."
+        "description": "Zbuduj sieć kontaktów z mentorami z czołowych firm - to często cenniejsze niż sama nagroda. Staże, „job shadowing” i połączenia, które otwierają drzwi."
       }
     ],
     "ctaLabel": "Chcę wziąć udział"
@@ -290,7 +291,7 @@
             "variant": "normal"
           },
           {
-            "text": "Działa w obszarach: edukacji klimatycznej, odpowiedzialnych technologii, neuroróżnorodności, wsparcia kobiet, kultury empatii oraz innowacji społecznych — łącząc je w praktyczne programy i partnerskie projekty.",
+            "text": "Działa w obszarach: edukacji klimatycznej, odpowiedzialnych technologii, neuroróżnorodności, wsparcia kobiet, kultury empatii oraz innowacji społecznych - łącząc je w praktyczne programy i partnerskie projekty.",
             "variant": "note"
           }
         ]
@@ -341,7 +342,7 @@
       {
         "icon": "ph-star",
         "title": "Dostęp do top talentów",
-        "description": "Pierwszy kontakt z najbardziej zmotywowanymi młodymi ludźmi w Polsce — zanim trafi do nich konkurencja."
+        "description": "Pierwszy kontakt z najbardziej zmotywowanymi młodymi ludźmi w Polsce - zanim trafi do nich konkurencja."
       },
       {
         "icon": "ph-megaphone",
@@ -356,7 +357,7 @@
       {
         "icon": "ph-buildings",
         "title": "Employer Branding",
-        "description": "Hackathon to najlepszy sposób na znalezienie kreatywnych pracowników spoza schematu. Poznaj kandydatów w działaniu — zanim trafią na rynek pracy."
+        "description": "Hackathon to najlepszy sposób na znalezienie kreatywnych pracowników spoza schematu. Poznaj kandydatów w działaniu - zanim trafią na rynek pracy."
       },
       {
         "icon": "ph-flag",
@@ -370,7 +371,7 @@
   "bottomCta": {
     "titleLead": "Gotowy, żeby",
     "titleAccent": "hackować dorosłość?",
-    "text": "Zapisy są otwarte — zgłoś swój zespół i zacznij działać już dziś.",
+    "text": "Zapisy są otwarte - zgłoś swój zespół i zacznij działać już dziś.",
     "ctaLabel": "Chcę wziąć udział"
   },
   "footer": {
@@ -406,7 +407,7 @@
     "tagline": "Hackuj dorosłość ✦ wymyśl lepsze jutro"
   },
   "cookie": {
-    "text": "Ta strona może używać plików cookies do analizy ruchu (Google Analytics). Wybierz, czy się na to zgadzasz — strona działa tak samo niezależnie od Twojej decyzji.",
+    "text": "Używamy Google Analytics, żeby sprawdzić, ile osób odwiedza stronę i które sekcje czytacie najczęściej — dane nie są sprzedawane ani udostępniane nikomu poza Google. Wybór jest Twój, strona działa tak samo niezależnie od decyzji.",
     "accept": "Zgadzam się",
     "decline": "Nie zgadzam się"
   }

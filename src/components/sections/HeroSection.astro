@@ -22,7 +22,7 @@ const { hero, waitlistUrl } = Astro.props;
     <p class="eyebrow"><span class="accent-dot" aria-hidden="true"></span>{hero.eyebrow}</p>
 
     <h1 class="hero__wordmark" id="hero-heading">
-      {hero.wordmarkLead}<span class="text-gradient">{hero.wordmarkAccent}</span>
+      <span class="sr-only">{hero.eyebrow} — </span>{hero.wordmarkLead}<span class="text-gradient">{hero.wordmarkAccent}</span>
     </h1>
 
     <p class="hero__tagline">

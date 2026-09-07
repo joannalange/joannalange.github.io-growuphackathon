@@ -1,0 +1,48 @@
+name: SEO checks
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  seo-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enable corepack + prepare pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.0 --activate
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: .pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --store-dir .pnpm-store
+
+      - name: Build site
+        run: pnpm build
+
+      - name: Validate structured data (JSON-LD)
+        run: node scripts/validate-jsonld.mjs
+
+      - name: Check for broken links
+        run: >
+          npx -y linkinator@6 dist/client --recurse
+          --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          --skip "instagram.com|facebook.com|deepkind.org"
+
+      - name: Lighthouse CI
+        run: npx -y @lhci/cli@0.15 autorun --config=./lighthouserc.json

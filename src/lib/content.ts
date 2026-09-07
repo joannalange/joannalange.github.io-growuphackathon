@@ -1,4 +1,6 @@
 import { createReader } from "@keystatic/core/reader";
+import sharp from "sharp";
+import path from "node:path";
 import keystaticConfig from "../../keystatic.config";
 import { PARTNER_IMAGES_PATH, PEOPLE_IMAGES_PATH } from "./image-paths";
 
@@ -50,25 +52,51 @@ export type HomeContent = NonNullable<
   Awaited<ReturnType<typeof reader.singletons.home.read>>
 >;
 
-/** A partner logo entry, with the logo resolved to a public image path. */
+/** A partner logo entry, with the logo resolved to a public image path and its intrinsic size. */
 export interface PartnerLogo {
   slug: string;
   name: string;
   category: string;
   order: number;
   logo: string;
+  width: number | null;
+  height: number | null;
+}
+
+/** Reads a public/-relative image's intrinsic pixel size; null if it can't be read (e.g. missing file). */
+async function readImageSize(
+  publicPath: string,
+): Promise<{ width: number | null; height: number | null }> {
+  try {
+    const { width, height } = await sharp(
+      path.join(process.cwd(), "public", publicPath),
+    ).metadata();
+    return { width: width ?? null, height: height ?? null };
+  } catch {
+    return { width: null, height: null };
+  }
 }
 
 /** All partner logos, read from the `partnerLogos` collection. */
 export async function getPartnerLogos(): Promise<PartnerLogo[]> {
   const all = await reader.collections.partnerLogos.all();
-  return all.map(({ slug, entry }) => ({
-    slug,
-    name: entry.name,
-    category: entry.category,
-    order: entry.order ?? 0,
-    logo: entry.logo ? `${PARTNER_IMAGES_PATH}${entry.logo}` : "",
-  }));
+  return Promise.all(
+    all.map(async ({ slug, entry }) => {
+      const logo = entry.logo ? `${PARTNER_IMAGES_PATH}${entry.logo}` : "";
+      const { width, height } = logo
+        ? await readImageSize(logo)
+        : { width: null, height: null };
+      return {
+        slug,
+        name: entry.name,
+        category: entry.category,
+        order: entry.order ?? 0,
+        logo,
+        width,
+        height,
+      };
+    }),
+  );
 }
 
 /** A mentor/expert/trainer entry, with the photo resolved to a public image path. */

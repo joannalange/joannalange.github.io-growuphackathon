@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import { getHomeContent } from '../lib/content';
+
+// See src/pages/index.astro for why this is explicit.
+export const prerender = true;
+
+const content = await getHomeContent();
+const title = 'Polityka prywatności — GrowUp Hackathon 2026';
+const description =
+  'Polityka prywatności GrowUp Hackathon 2026: jakie dane zbieramy, w jakim celu je przetwarzamy, komu je udostępniamy i jakie prawa przysługują uczestnikom.';
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Strona główna', item: 'https://growuphackathon.pl/' },
+    { '@type': 'ListItem', position: 2, name: 'Polityka prywatności', item: 'https://growuphackathon.pl/polityka-prywatnosci/' },
+  ],
+};
+const breadcrumbJsonLdSafe = JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  socialLinks={{ facebook: content.links.facebook, instagram: content.links.instagram }}
+  cloudflareToken={content.analytics.cloudflareToken}
+>
+  <script is:inline type="application/ld+json" set:html={breadcrumbJsonLdSafe} />
+  <Header nav={content.nav} />
+  <main id="main" tabindex="-1" class="regulamin">
+    <div class="container container--md regulamin__inner">
+      <p class="eyebrow"><span class="accent-dot" aria-hidden="true"></span>Dokument</p>
+      <h1 class="regulamin__title">
+        Polityka <span class="text-gradient">prywatności</span>
+      </h1>
+
+      <p class="regulamin__lead">
+        Zasady przetwarzania danych osobowych uczestników programu GrowUp Hackathon 2026 oraz
+        osób odwiedzających tę stronę internetową.
+      </p>
+
+      <article class="regulamin__doc section-shell">
+        <p class="regulamin__doc-org"><em>Organizator: Fundacja DeepKind</em></p>
+
+        <h2>1. Informacje ogólne</h2>
+        <ol>
+          <li>Niniejsza polityka prywatności określa zasady przetwarzania danych osobowych uczestników projektu GrowUp Hackathon (dalej: „Hackathon") oraz osób odwiedzających stronę internetową growuphackathon.pl.</li>
+          <li>Hackathon jest projektem realizowanym przez Fundację DeepKind z siedzibą w Warszawie.</li>
+          <li>W sprawach dotyczących ochrony danych osobowych można kontaktować się z organizatorem pod adresem e-mail: rodo@deepkind.org.</li>
+          <li>Polityka stanowi uzupełnienie ogólnej polityki prywatności Fundacji dostępnej pod adresem: <a href="https://deepkind.org/polityka-prywatnosci/" target="_blank" rel="noopener noreferrer">deepkind.org/polityka-prywatnosci</a>.</li>
+        </ol>
+
+        <h2>2. Administrator danych</h2>
+        <p>Administratorem danych osobowych jest:</p>
+        <p><strong>Fundacja DeepKind</strong><br />Warszawa, ul. Odolańska 3/15<br />KRS: 0001193215</p>
+        <p>Administrator decyduje o celach i sposobach przetwarzania danych osobowych.</p>
+
+        <h2>3. Jakie dane zbieramy</h2>
+        <p>W związku z organizacją Hackathonu możemy przetwarzać następujące dane uczestników:</p>
+        <ul>
+          <li>imię i nazwisko</li>
+          <li>adres e-mail</li>
+          <li>numer telefonu</li>
+          <li>nazwa organizacji / uczelni / firmy</li>
+          <li>informacje o doświadczeniu lub kompetencjach (np. w formularzu zgłoszeniowym)</li>
+          <li>dane zawarte w projektach lub prezentacjach</li>
+          <li>wizerunek utrwalony podczas wydarzeń związanych z projektem (zdjęcia, nagrania wideo)</li>
+        </ul>
+        <p>Podanie danych jest dobrowolne, jednak może być niezbędne do udziału w Hackathonie.</p>
+
+        <h2>4. Cele przetwarzania danych</h2>
+        <p>Dane osobowe uczestników są przetwarzane w celu:</p>
+        <ol>
+          <li>organizacji i przeprowadzenia Hackathonu,</li>
+          <li>komunikacji z uczestnikami (np. informacje organizacyjne),</li>
+          <li>wyboru uczestników i zespołów,</li>
+          <li>publikacji wyników konkursu,</li>
+          <li>promocji projektu i działań Fundacji,</li>
+          <li>archiwizacji dokumentacji projektowej wydarzenia.</li>
+        </ol>
+        <p>Podstawą prawną przetwarzania danych jest:</p>
+        <ul>
+          <li>zgoda uczestnika (art. 6 ust. 1 lit. a RODO),</li>
+          <li>realizacja uzasadnionego interesu administratora (art. 6 ust. 1 lit. f RODO).</li>
+        </ul>
+
+        <h2>5. Wizerunek uczestników</h2>
+        <p>Podczas wydarzenia mogą być wykonywane zdjęcia i nagrania wideo. Materiały te mogą być wykorzystywane w celu:</p>
+        <ul>
+          <li>dokumentacji wydarzenia,</li>
+          <li>promocji Hackathonu,</li>
+          <li>promocji działań Fundacji i partnerów.</li>
+        </ul>
+        <p>Publikacja może nastąpić m.in. w mediach, w tym mediach społecznościowych, materiałach promocyjnych oraz na stronach internetowych organizatora i partnerów.</p>
+
+        <h2>6. Odbiorcy danych</h2>
+        <p>Dane uczestników mogą być udostępniane:</p>
+        <ul>
+          <li>partnerom Hackathonu,</li>
+          <li>mentorom, ekspertom, trenerom i jurorom wydarzenia,</li>
+          <li>dostawcom narzędzi wykorzystywanych do organizacji wydarzenia (np. platformy rejestracyjne, komunikacyjne),</li>
+          <li>podmiotom świadczącym usługi IT lub marketingowe.</li>
+        </ul>
+        <p>Udostępnianie danych odbywa się wyłącznie w zakresie niezbędnym do realizacji Hackathonu.</p>
+
+        <h2>7. Okres przechowywania danych</h2>
+        <p>Dane osobowe uczestników będą przechowywane:</p>
+        <ul>
+          <li>przez czas trwania projektu,</li>
+          <li>przez okres niezbędny do rozliczenia projektu,</li>
+          <li>do czasu wycofania zgody lub zgłoszenia sprzeciwu.</li>
+        </ul>
+
+        <h2>8. Prawa osób, których dane dotyczą</h2>
+        <p>Osobom, których dane dotyczą, przysługuje prawo do:</p>
+        <ul>
+          <li>dostępu do danych,</li>
+          <li>sprostowania danych,</li>
+          <li>usunięcia danych,</li>
+          <li>ograniczenia przetwarzania,</li>
+          <li>przenoszenia danych,</li>
+          <li>wniesienia sprzeciwu wobec przetwarzania,</li>
+          <li>cofnięcia zgody w dowolnym momencie,</li>
+          <li>wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych.</li>
+        </ul>
+
+        <h2>9. Pliki cookies i narzędzia analityczne na stronie internetowej</h2>
+        <p>Niezależnie od danych opisanych w punktach 1–8, w związku z korzystaniem ze strony internetowej growuphackathon.pl mogą być przetwarzane dane osób ją odwiedzających, niezależnie od udziału w Hackathonie.</p>
+        <p><strong>Google Analytics.</strong> Strona może korzystać z Google Analytics (Google Ireland Limited) w celu analizy ruchu na stronie (liczba odwiedzin, przeglądane sekcje). Narzędzie to wykorzystuje pliki cookies i jest uruchamiane wyłącznie po wyrażeniu zgody w widocznym na stronie komunikacie o plikach cookies — podstawą prawną przetwarzania jest zgoda (art. 6 ust. 1 lit. a RODO). Zgodę można wycofać w dowolnym momencie; spowoduje to, że komunikat pojawi się ponownie przy kolejnej wizycie.</p>
+        <p><strong>Cloudflare Web Analytics.</strong> Strona może również korzystać z Cloudflare Web Analytics — narzędzia do pomiaru ruchu i wydajności strony, które nie wykorzystuje plików cookies ani innych mechanizmów zapisujących dane na urządzeniu odwiedzającego i nie tworzy indywidualnego profilu użytkownika. Ze względu na brak takich mechanizmów, narzędzie to może działać niezależnie od zgody na pliki cookies. Podstawą prawną przetwarzania jest uzasadniony interes administratora (art. 6 ust. 1 lit. f RODO), polegający na monitorowaniu jakości i wydajności strony. Odwiedzającemu przysługuje prawo wniesienia sprzeciwu wobec takiego przetwarzania.</p>
+        <p>Dostawcy obu narzędzi (Google, Cloudflare) mogą przekazywać dane poza Europejski Obszar Gospodarczy w oparciu o mechanizmy zgodne z RODO, w tym decyzję Komisji Europejskiej w sprawie ram EU-US Data Privacy Framework oraz standardowe klauzule umowne jako zabezpieczenie dodatkowe.</p>
+
+        <h2>10. Kontakt w sprawie danych osobowych</h2>
+        <p>W sprawach związanych z przetwarzaniem danych osobowych można kontaktować się z administratorem:</p>
+        <p><strong>Fundacja DeepKind</strong><br />e-mail: rodo@deepkind.org</p>
+      </article>
+
+      <p class="regulamin__back">
+        <a href="/">← Wróć na stronę główną</a>
+      </p>
+    </div>
+  </main>
+  <Footer footer={content.footer} links={content.links} />
+  <CookieBanner cookie={content.cookie} gaMeasurementId={content.analytics.gaMeasurementId} />
+</BaseLayout>
+
+<style>
+  .regulamin {
+    padding-block: 10rem var(--space-24);
+    padding-inline: var(--space-4);
+  }
+  .regulamin__inner {
+    max-width: 48rem;
+  }
+  .regulamin__title {
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1.1;
+    color: var(--c-white);
+    margin-block: var(--space-5) var(--space-8);
+  }
+  .regulamin__lead {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--c-slate-300);
+    margin-bottom: var(--space-8);
+  }
+
+  .regulamin__doc {
+    padding: var(--space-8) var(--space-6);
+    margin-bottom: var(--space-10);
+    color: var(--c-gray-300);
+  }
+  .regulamin__doc-org {
+    text-align: center;
+    color: var(--c-slate-400);
+    margin-bottom: var(--space-8);
+  }
+  .regulamin__doc h2 {
+    font-size: 1.125rem;
+    color: var(--c-white);
+    margin-block: var(--space-10) var(--space-4);
+  }
+  .regulamin__doc h2:first-of-type {
+    margin-top: 0;
+  }
+  .regulamin__doc p {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+  .regulamin__doc ol,
+  .regulamin__doc ul {
+    list-style: decimal;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .regulamin__doc ul {
+    list-style: disc;
+  }
+  .regulamin__doc li {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    padding-left: var(--space-1);
+  }
+  .regulamin__doc li::marker {
+    color: var(--c-lime-400);
+    font-weight: 600;
+  }
+  .regulamin__doc strong {
+    color: var(--c-white);
+  }
+  .regulamin__doc a {
+    color: var(--c-lavender);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s var(--ease-out);
+  }
+  .regulamin__doc a:hover {
+    color: var(--c-lime-400);
+  }
+
+  @media (min-width: 768px) {
+    .regulamin__doc {
+      padding: var(--space-12) var(--space-10);
+    }
+  }
+
+  .regulamin__back a {
+    color: var(--c-lavender);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s var(--ease-out);
+  }
+  .regulamin__back a:hover {
+    color: var(--c-lime-400);
+  }
+</style>

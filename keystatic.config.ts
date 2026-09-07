@@ -103,6 +103,9 @@ export default config({
             gaMeasurementId: text(
               "Google Analytics Measurement ID (G-XXXXXXXXXX). Leave empty to keep analytics fully disabled — no script is ever loaded without one, regardless of cookie consent.",
             ),
+            cloudflareToken: text(
+              "Cloudflare Web Analytics site token. Loads unconditionally (no cookies/localStorage used, so no consent gate) — leave empty to disable.",
+            ),
           },
           { label: "Analytics" },
         ),

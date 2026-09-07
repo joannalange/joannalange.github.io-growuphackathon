@@ -23,10 +23,15 @@ package-lock.json
 /.vercel
 /.netlify
 
+# Lighthouse CI
+/.lighthouseci
+
 # Keystatic session + editor
 /keystatic.session.json
 /keystatic.session
 /keystatic
+
+/docs/internal/
 
 # Environment files
 .env
@@ -36,6 +41,15 @@ package-lock.json
 
 # Wrangler local dev state
 /.wrangler
+
+# Terraform (.terraform.lock.hcl is NOT ignored -- it's the provider version
+# lock file and should be committed, same idea as a package-lock.json)
+/terraform/.terraform/
+/terraform/*.tfstate
+/terraform/*.tfstate.*
+/terraform/*.tfplan
+/terraform/tfplan
+/terraform/terraform.tfvars
 
 # Logs
 npm-debug.log*

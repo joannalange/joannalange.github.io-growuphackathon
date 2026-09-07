@@ -14,17 +14,39 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  /** Only the homepage actually represents the event — other pages (e.g. regulamin) must not carry this schema. */
+  includeEventSchema?: boolean;
+  socialLinks?: { facebook?: string; instagram?: string };
+  /** Cloudflare Web Analytics site token. Loads unconditionally (no cookies/localStorage) — omit to disable. */
+  cloudflareToken?: string;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, includeEventSchema = false, socialLinks, cloudflareToken } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
-const ogImageUrl = ogImage ?? new URL('/logos/logo_growup.png', Astro.site ?? Astro.url).href;
+const siteRoot = new URL('/', Astro.site ?? Astro.url).href;
+const ogImageUrl = ogImage ?? new URL('/logos/og-image.png', Astro.site ?? Astro.url).href;
+const logoUrl = new URL('/logos/logo_growup.png', Astro.site ?? Astro.url).href;
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NGO',
+  name: 'Fundacja DeepKind',
+  url: siteRoot,
+  logo: logoUrl,
+  // NIP is Poland's tax ID — taxID is the correct schema.org fit. KRS (the court/company
+  // register number) has no dedicated schema.org property, so it goes under identifier.
+  taxID: '5214132486',
+  identifier: { '@type': 'PropertyValue', propertyID: 'KRS', value: '0001193215' },
+  sameAs: [socialLinks?.facebook, socialLinks?.instagram].filter(Boolean),
+};
+const organizationJsonLdSafe = JSON.stringify(organizationJsonLd).replace(/</g, '\\u003c');
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: 'GrowUp Hackathon 2026',
   description,
+  image: ogImageUrl,
   eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
   startDate: '2026-11-12',
@@ -38,11 +60,20 @@ const jsonLd = {
     },
   ],
   organizer: { '@type': 'Organization', name: 'Fundacja DeepKind', url: canonical },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'PLN',
+    url: canonical,
+    availability: 'https://schema.org/InStock',
+  },
   isAccessibleForFree: true,
 };
 
 // Escape `<` so content can never break out of the <script> context (e.g. a literal </script>).
 const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
+
+const cfBeaconAttr = cloudflareToken ? JSON.stringify({ token: cloudflareToken }) : undefined;
 ---
 
 <!doctype html>
@@ -51,10 +82,12 @@ const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/logos/logo_growup.png" />
+    <link rel="apple-touch-icon" href="/logos/apple-touch-icon.png" />
     <link rel="preload" href={poppins400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={poppins900} as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
 
     <meta property="og:title" content={title} />
@@ -62,13 +95,19 @@ const jsonLdSafe = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="pl_PL" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <script is:inline type="application/ld+json" set:html={jsonLdSafe} />
+    <script is:inline type="application/ld+json" set:html={organizationJsonLdSafe} />
+    {includeEventSchema && <script is:inline type="application/ld+json" set:html={jsonLdSafe} />}
+
+    {cfBeaconAttr && (
+      <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={cfBeaconAttr} />
+    )}
 
     <script is:inline>
       // Flag that JS is available so scroll-reveal can safely start hidden.

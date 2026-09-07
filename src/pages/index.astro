@@ -26,7 +26,14 @@ const content = await getHomeContent();
 const waitlistUrl = content.links.waitlist;
 ---
 
-<BaseLayout title={content.seo.title} description={content.seo.description} ogImage={content.seo.ogImage}>
+<BaseLayout
+  title={content.seo.title}
+  description={content.seo.description}
+  ogImage={content.seo.ogImage}
+  socialLinks={{ facebook: content.links.facebook, instagram: content.links.instagram }}
+  cloudflareToken={content.analytics.cloudflareToken}
+  includeEventSchema
+>
   <Header nav={content.nav} />
   <main id="main" tabindex="-1">
     <HeroSection hero={content.hero} waitlistUrl={waitlistUrl} />

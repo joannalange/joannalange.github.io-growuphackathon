@@ -28,26 +28,45 @@ const { cookie, gaMeasurementId } = Astro.props;
 <style>
   .cookie-banner {
     position: fixed;
-    inset: auto 0 0 0;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
     z-index: 50;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-6);
-    padding: var(--space-4);
-    font-size: 0.875rem;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-6);
+    font-size: 0.9375rem;
+    width: min(92vw, 64rem);
     color: var(--c-gray-300);
-    background: color-mix(in oklch, var(--c-cookie) 92%, transparent);
-    border-top: 1px solid color-mix(in oklch, var(--c-lime-500) 20%, transparent);
+    background: color-mix(in oklch, var(--c-cookie) 96%, transparent);
+    border: 1px solid color-mix(in oklch, var(--c-lime-500) 35%, transparent);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    box-shadow: 0 -12px 32px color-mix(in oklch, var(--c-ink-deep) 55%, transparent);
     backdrop-filter: blur(20px);
   }
   .cookie-banner[hidden] {
     display: none;
   }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cookie-banner {
+      transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+    }
+    @starting-style {
+      .cookie-banner:not([hidden]) {
+        opacity: 0;
+        transform: translateX(-50%) translateY(1.5rem);
+      }
+    }
+  }
   .cookie-banner__text {
+    flex: 1 1 auto;
+    min-width: 0;
     text-align: center;
-    max-width: 56rem;
   }
   .cookie-banner__actions {
     display: flex;
@@ -56,6 +75,10 @@ const { cookie, gaMeasurementId } = Astro.props;
   }
   .cookie-banner__accept,
   .cookie-banner__decline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
     cursor: pointer;
     font-family: inherit;
     font-size: inherit;
@@ -65,12 +88,12 @@ const { cookie, gaMeasurementId } = Astro.props;
     transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
   }
   .cookie-banner__decline {
-    border: 1px solid color-mix(in oklch, var(--c-white) 25%, transparent);
-    background: transparent;
-    color: var(--c-gray-300);
+    border: 0;
+    color: var(--c-text-100);
+    background: var(--c-gray-700);
   }
   .cookie-banner__decline:hover {
-    background: color-mix(in oklch, var(--c-white) 8%, transparent);
+    background: var(--c-gray-500);
   }
   .cookie-banner__accept {
     border: 0;
@@ -79,6 +102,15 @@ const { cookie, gaMeasurementId } = Astro.props;
   }
   .cookie-banner__accept:hover {
     background: var(--c-lime-400);
+  }
+
+  @media (max-width: 767px) {
+    .cookie-banner {
+      width: calc(100vw - 1rem);
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      font-size: 0.8125rem;
+    }
   }
 
   @media (min-width: 768px) {
@@ -117,8 +149,8 @@ const { cookie, gaMeasurementId } = Astro.props;
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer ?? [];
-    function gtag(...args: unknown[]) {
-      window.dataLayer.push(args);
+    function gtag(..._args: unknown[]) {
+      window.dataLayer.push(arguments);
     }
     gtag('js', new Date());
     gtag('config', measurementId);
@@ -138,12 +170,15 @@ const { cookie, gaMeasurementId } = Astro.props;
     }
 
     if (consent !== 'accepted' && consent !== 'declined') {
-      banner.hidden = false;
-      const reserveSpace = () => {
-        document.body.style.paddingBottom = `${banner.offsetHeight}px`;
-      };
-      reserveSpace();
-      new ResizeObserver(reserveSpace).observe(banner);
+      setTimeout(() => {
+        banner.hidden = false;
+        const reserveSpace = () => {
+          const occluded = window.innerHeight - banner.getBoundingClientRect().top;
+          document.body.style.paddingBottom = `${occluded}px`;
+        };
+        reserveSpace();
+        new ResizeObserver(reserveSpace).observe(banner);
+      }, 400);
     }
 
     const dismiss = (value: 'accepted' | 'declined') => {

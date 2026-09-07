@@ -25,16 +25,10 @@ const CATEGORIES: { slug: string; heading: string }[] = [
 
 const allLogos = await getPartnerLogos();
 
-// Most partner logo assets assume a light backdrop, so the default card
-// (see .partners__logo below) is deliberately light regardless of the
-// site's own dark theme. A couple of logos only exist as light/white
-// artwork on transparent, invisible on a light card — those need the dark
-// variant instead. Verified against the actual logo files, not guessed:
-// each was checked on both a light and a dark swatch before deciding.
-// If a newly added logo turns out invisible on the light card, add its
-// slug here.
-const DARK_CARD_LOGOS = new Set(['inkubator-uj', 'generacja-innowacja']);
-
+// Every partner logo sits on a light card (see .partners__logo below),
+// deliberately light regardless of the site's dark theme, since the logo
+// artwork assumes a white background. Any logo added here must be supplied
+// in a dark/colour variant that reads on white (not white-on-transparent).
 const logoRows = CATEGORIES.map((cat) => ({
   heading: cat.heading,
   logos: allLogos
@@ -58,8 +52,14 @@ const logoRows = CATEGORIES.map((cat) => ({
                 <h3 class="partners__tier-heading">{row.heading}</h3>
                 <div class="partners__logos">
                   {row.logos.map((logo) => (
-                    <div class={`partners__logo${DARK_CARD_LOGOS.has(logo.slug) ? ' partners__logo--dark' : ''}`}>
-                      <img src={logo.logo} alt={logo.name} loading="lazy" />
+                    <div class="partners__logo">
+                      <img
+                        src={logo.logo}
+                        alt={logo.name}
+                        width={logo.width ?? undefined}
+                        height={logo.height ?? undefined}
+                        loading="lazy"
+                      />
                     </div>
                   ))}
                 </div>
@@ -97,7 +97,7 @@ const logoRows = CATEGORIES.map((cat) => ({
                 <Icon name={`ph:${benefit.icon.replace(/^ph-/, '')}-duotone`} aria-hidden="true" />
               </span>
               <div>
-                <h4 class="partners__benefit-title">{benefit.title}</h4>
+                <h3 class="partners__benefit-title">{benefit.title}</h3>
                 <p class="partners__benefit-desc">{benefit.description}</p>
               </div>
             </li>
@@ -156,49 +156,33 @@ const logoRows = CATEGORIES.map((cat) => ({
     margin-bottom: var(--space-6);
   }
 
+  /* Web Summit-style: uniform grid of white square tiles, logos centred in
+     full colour, fixed card width + centred grid so any tier stays balanced. */
   .partners__logos {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 168px));
     justify-content: center;
-    align-items: center;
-    gap: var(--space-12);
+    gap: var(--space-5);
   }
   .partners__logo {
-    height: 5rem;
-    min-width: 10rem;
-    padding: var(--space-3) var(--space-6);
+    aspect-ratio: 1 / 1;
+    padding: var(--space-6);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-pill);
-    /*
-     * Translucent white, not var(--c-white) — that token gets remapped to
-     * a dark ink under the light "plakat" theme preview, but a logo card
-     * needs a backdrop that reads as actually light regardless of the
-     * site's own theme, since most partner logo assets assume a white
-     * background. Kept as a glass panel (color-mix + blur + soft border),
-     * matching .section-shell/.puzzle-block elsewhere, rather than a flat
-     * opaque card — just at high enough opacity to still give real
-     * contrast, unlike the original 5% tint this replaced.
-     */
-    background: color-mix(in oklch, white 82%, transparent);
+    border-radius: var(--radius-md);
+    /* Solid white card — literal white, not var(--c-white), which gets
+       remapped to dark ink under the light "plakat" theme. Partner logo
+       artwork assumes a white background, so the card stays white regardless
+       of the site's own dark theme. */
+    background: #ffffff;
     border: 1px solid color-mix(in oklch, white 30%, transparent);
-    box-shadow: 0 8px 24px color-mix(in oklch, black 20%, transparent);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px color-mix(in oklch, black 25%, transparent);
     transition: border-color 0.3s var(--ease-out), background 0.3s var(--ease-out), transform 0.3s var(--ease-out);
   }
   .partners__logo:hover {
-    border-color: color-mix(in oklch, var(--c-lime-400) 45%, transparent);
-    background: color-mix(in oklch, white 90%, transparent);
-    transform: translateY(-3px);
-  }
-  /* The couple of logos that only exist as light/white artwork — see DARK_CARD_LOGOS above. */
-  .partners__logo--dark {
-    background: color-mix(in oklch, black 55%, transparent);
-    border-color: color-mix(in oklch, white 10%, transparent);
-  }
-  .partners__logo--dark:hover {
-    background: color-mix(in oklch, black 68%, transparent);
+    border-color: color-mix(in oklch, var(--c-lime-400) 55%, transparent);
+    transform: translateY(-4px);
   }
   .partners__logo img {
     max-width: 100%;
@@ -289,7 +273,7 @@ const logoRows = CATEGORIES.map((cat) => ({
       padding: var(--space-12) var(--space-10);
     }
     .partners__logos {
-      gap: var(--space-20);
+      gap: var(--space-6);
     }
     .partners__benefits {
       grid-template-columns: repeat(2, 1fr);
