@@ -209,11 +209,14 @@ const logoRows = CATEGORIES.map((cat) => ({
     line-height: 1.3;
     color: #9ca3af;
     /* Cap long institution names at two lines instead of letting them wrap
-       freely and stretch the whole grid row taller than its neighbours. */
+       freely and stretch the whole grid row taller than its neighbours.
+       max-height is the real backstop -- as a flex child, -webkit-line-clamp
+       alone let a third line bleed through instead of hard-stopping at 2. */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    max-height: 2.6em;
   }
 
   .partners__become-head {
