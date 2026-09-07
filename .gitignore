@@ -42,15 +42,6 @@ package-lock.json
 # Wrangler local dev state
 /.wrangler
 
-# Terraform (.terraform.lock.hcl is NOT ignored -- it's the provider version
-# lock file and should be committed, same idea as a package-lock.json)
-/terraform/.terraform/
-/terraform/*.tfstate
-/terraform/*.tfstate.*
-/terraform/*.tfplan
-/terraform/tfplan
-/terraform/terraform.tfvars
-
 # Logs
 npm-debug.log*
 yarn-debug.log*
